@@ -5,7 +5,7 @@ const router = express.Router()
 //
 // CREATE
 //
-app.post('/task', async (req, res) => {
+router.post('/task', async (req, res) => {
     const task = new Task(req.body)
 
     try {
@@ -19,7 +19,7 @@ app.post('/task', async (req, res) => {
 //
 // READ
 //
-app.get('/tasks', async (req, res) => {
+router.get('/tasks', async (req, res) => {
     const tasks = await Task.find({})
 
     try {
@@ -30,7 +30,7 @@ app.get('/tasks', async (req, res) => {
     }
 })
 
-app.get('/task/:id', async (req, res) => {
+router.get('/task/:id', async (req, res) => {
     const _id = req.params.id
 
     try {
@@ -46,7 +46,7 @@ app.get('/task/:id', async (req, res) => {
 //
 // UPDATE
 //
-app.patch('/task/:id', async (req, res) => {
+router.patch('/task/:id', async (req, res) => {
     const _id = req.params.id
     const args = req.body
     const allowedUpdates = ['completed', 'description']
@@ -67,7 +67,7 @@ app.patch('/task/:id', async (req, res) => {
 //
 // DELETE
 //
-app.delete('/task/:id', async (req, res) => {
+router.delete('/task/:id', async (req, res) => {
     const _id = req.params.id
 
     try {
