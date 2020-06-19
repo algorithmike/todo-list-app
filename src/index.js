@@ -1,5 +1,6 @@
 const express = require('express')
 require('./db/mongoose')
+const auth = require('./middleware/auth')
 const userRouter = require('../src/routers/user')
 const taskRouter = require('../src/routers/task')
 
@@ -13,4 +14,4 @@ app.use(taskRouter)
 
 app.listen(port, () => {
     console.log("Server is on port " + port)
-})
+}) 
