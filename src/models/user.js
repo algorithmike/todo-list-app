@@ -44,6 +44,14 @@ const userSchema = new mongoose.Schema({
 })
 
 // 'methods' are accessible on the user instances.
+userSchema.methods.toJSON = function() {
+    userObject = this.toObject()
+    delete userObject.password
+    delete userObject.tokens
+    
+    return userObject
+}
+
 userSchema.methods.generateAuthToken = async function() {
     const token =  await jwt.sign({ _id:  this._id.toString()}, 'placeholderPrivateKey')
 
