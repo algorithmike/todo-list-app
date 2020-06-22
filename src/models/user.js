@@ -43,6 +43,15 @@ const userSchema = new mongoose.Schema({
     }]
 })
 
+// 'virtual' is not actually stored in the User document in the DB.
+// They're virtual fields for relationships for Mongoose.
+userSchema.virtual('tasks', {
+    ref: 'Task',
+    localField: '_id', // The '_id' of this User model...
+    foreignField: 'owner' // is the 'owner' in the related Task model
+
+})
+
 // 'methods' are accessible on the user instances.
 userSchema.methods.toJSON = function() {
     userObject = this.toObject()
