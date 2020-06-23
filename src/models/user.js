@@ -42,6 +42,8 @@ const userSchema = new mongoose.Schema({
             required: true
         }
     }]
+}, {
+    timestamps: true
 })
 
 // 'virtual' is not actually stored in the User document in the DB.
