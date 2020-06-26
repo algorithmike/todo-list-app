@@ -1,11 +1,10 @@
 const express = require('express')
 const User = require('../models/user')
 const auth = require('../middleware/auth')
+const uploadPic = require('../middleware/uploadPic')
 const router = express.Router()
 
-//
-// CREATE
-//
+// Create new user
 router.post('/index', async (req, res) => {
     const user = new User(req.body)
 
@@ -19,9 +18,7 @@ router.post('/index', async (req, res) => {
     }
 })
 
-//
-// READ
-//
+// Login
 router.post('/users/login', async (req, res) => {
     try {
         const user = await User.findByCredentials(req.body.email, req.body.password)
@@ -33,6 +30,7 @@ router.post('/users/login', async (req, res) => {
     }
 })
 
+// Logout
 router.post('/users/logout', auth, async (req, res) => {
     try {
         req.user.tokens = req.user.tokens.filter((token) => token.token !== req.token)
@@ -44,6 +42,7 @@ router.post('/users/logout', auth, async (req, res) => {
     }
 })
 
+// Logout / Clear all user's tokens if signed in on multiple devices
 router.post('/users/logoutAll', auth, async (req, res) => {
     try {
         req.user.tokens = []
@@ -55,13 +54,12 @@ router.post('/users/logoutAll', auth, async (req, res) => {
     }
 })
 
+// Retrieve user's own profile
 router.get('/users/me', auth, async (req, res) => {
     res.send(req.user)
 })
 
-//
-// UPDATE
-//
+// Update user's own profile
 router.patch('/user/me', auth, async (req, res) => {
     const _id = req.user.id
     const args = req.body
@@ -81,9 +79,12 @@ router.patch('/user/me', auth, async (req, res) => {
     }
 })
 
-//
-// DELETE
-//
+// Add a profile picture to profile
+router.post('/user/me/avatar', uploadPic('avatar'), (req, res) => {
+    res.send()
+})
+
+// Delete user's own profile
 router.delete('/user/me', auth, async (req, res) => {
     const _id = req.user._id
 
