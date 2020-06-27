@@ -82,6 +82,10 @@ router.patch('/user/me', auth, async (req, res) => {
 // Add a profile picture to profile
 router.post('/user/me/avatar', uploadPic('avatar'), (req, res) => {
     res.send()
+}, (error, req, res, next) => {
+    res.status(400).send({
+        error: error.message
+    })
 })
 
 // Delete user's own profile
