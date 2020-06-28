@@ -59,6 +59,20 @@ router.get('/users/me', auth, async (req, res) => {
     res.send(req.user)
 })
 
+// Retrieve profile picture of user
+router.get('/user/:id/avatar', async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id)
+
+        if(!user || !user.avatar) throw new Error()
+
+        res.set('Content-Type', 'image/png')
+        res.send(user.avatar)
+    } catch (e) {
+        res.status(404).send()
+    }
+})
+
 // Update user's own profile
 router.patch('/user/me', auth, async (req, res) => {
     const _id = req.user.id
@@ -80,12 +94,28 @@ router.patch('/user/me', auth, async (req, res) => {
 })
 
 // Add a profile picture to profile
-router.post('/user/me/avatar', uploadPic('avatar'), (req, res) => {
+router.post('/user/me/avatar', auth, uploadPic(), async (req, res) => {
+    req.user.avatar = req.file.buffer
+
+    await req.user.save()
     res.send()
 }, (error, req, res, next) => {
     res.status(400).send({
         error: error.message
     })
+})
+
+// Delet user's own profile picture
+router.delete('/user/me/avatar', auth, async (req, res) => {
+    try {
+        req.user.avatar = undefined
+
+        await req.user.save()
+        res.send(req.user)
+        const _id = req.user._id
+    } catch (e) {
+        res.status(400).send(e)
+    }
 })
 
 // Delete user's own profile

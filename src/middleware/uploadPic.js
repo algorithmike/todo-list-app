@@ -1,8 +1,7 @@
 const multer = require('multer')
 
-const uploadPic = formBodyKey => {
+const uploadPic = () => {
     return multer({
-        dest: formBodyKey + 's',
         limits: {
             fileSize: 50000,
         },
@@ -13,7 +12,7 @@ const uploadPic = formBodyKey => {
 
             cb(undefined, true)
         }
-    }).single(formBodyKey)
+    }).single('avatar')
 }
 
 module.exports = uploadPic

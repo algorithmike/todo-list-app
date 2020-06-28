@@ -36,6 +36,9 @@ const userSchema = new mongoose.Schema({
             if(value.includes("password")) throw new Error('Password must not contain the word, "passwrod".')
         }
     },
+    avatar: {
+        type: Buffer
+    },
     tokens: [{
         token: {
             type: String,
