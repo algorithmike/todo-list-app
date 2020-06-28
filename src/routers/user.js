@@ -1,4 +1,5 @@
 const express = require('express')
+const sharp = require('sharp')
 const User = require('../models/user')
 const auth = require('../middleware/auth')
 const uploadPic = require('../middleware/uploadPic')
@@ -95,7 +96,11 @@ router.patch('/user/me', auth, async (req, res) => {
 
 // Add a profile picture to profile
 router.post('/user/me/avatar', auth, uploadPic(), async (req, res) => {
-    req.user.avatar = req.file.buffer
+    const buffer = await sharp(req.file.buffer)
+                            .resize(300, 300,{fit: 'inside'})
+                            .png()
+                            .toBuffer()
+    req.user.avatar = buffer
 
     await req.user.save()
     res.send()
@@ -105,7 +110,7 @@ router.post('/user/me/avatar', auth, uploadPic(), async (req, res) => {
     })
 })
 
-// Delet user's own profile picture
+// Delete user's own profile picture
 router.delete('/user/me/avatar', auth, async (req, res) => {
     try {
         req.user.avatar = undefined
