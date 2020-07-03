@@ -1,4 +1,5 @@
 node_modules
 _playground.js
 .vscode
-avatars
+avatarssendgrid.env
+sendgrid.env
