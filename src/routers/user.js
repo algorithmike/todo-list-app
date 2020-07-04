@@ -3,6 +3,7 @@ const sharp = require('sharp')
 const User = require('../models/user')
 const auth = require('../middleware/auth')
 const uploadPic = require('../middleware/uploadPic')
+const sendWelcome = require('../emails/account')
 const router = express.Router()
 
 // Create new user
@@ -11,6 +12,7 @@ router.post('/index', async (req, res) => {
 
     try {
         await user.save()
+        sendWelcome(user.email, user.name)
         const token = await user.generateAuthToken()
 
         res.status(201).send({user, token})
