@@ -3,7 +3,7 @@ const sharp = require('sharp')
 const User = require('../models/user')
 const auth = require('../middleware/auth')
 const uploadPic = require('../middleware/uploadPic')
-const sendWelcome = require('../emails/account')
+const { sendWelcome, sendGoodbye } = require('../emails/account')
 const router = express.Router()
 
 // Create new user
@@ -131,6 +131,7 @@ router.delete('/user/me', auth, async (req, res) => {
 
     try {
         req.user.remove()
+        sendGoodbye(req.user.email, req.user.name)
         res.send(req.user)
     } catch (e) {
         res.status(400).send(e)
