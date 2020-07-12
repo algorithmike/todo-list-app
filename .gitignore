@@ -3,3 +3,4 @@ _playground.js
 .vscode
 avatarssendgrid.env
 sendgrid.env
+config/*
